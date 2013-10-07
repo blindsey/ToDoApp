@@ -19,6 +19,10 @@
 		13338B9D18015274004BC64D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13338B8518015274004BC64D /* UIKit.framework */; };
 		13338BA518015274004BC64D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13338BA318015274004BC64D /* InfoPlist.strings */; };
 		13338BA718015274004BC64D /* ToDoAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13338BA618015274004BC64D /* ToDoAppTests.m */; };
+		13338BB318015289004BC64D /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13338BB118015289004BC64D /* ToDoViewController.m */; };
+		13338BB418015289004BC64D /* ToDoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13338BB218015289004BC64D /* ToDoViewController.xib */; };
+		13338BBC180160F7004BC64D /* EditableTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13338BBB180160F7004BC64D /* EditableTableCell.xib */; };
+		13338BBF1801616A004BC64D /* EditableTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13338BBE1801616A004BC64D /* EditableTableCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +52,12 @@
 		13338BA218015274004BC64D /* ToDoAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ToDoAppTests-Info.plist"; sourceTree = "<group>"; };
 		13338BA418015274004BC64D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		13338BA618015274004BC64D /* ToDoAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToDoAppTests.m; sourceTree = "<group>"; };
+		13338BB018015289004BC64D /* ToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoViewController.h; sourceTree = "<group>"; };
+		13338BB118015289004BC64D /* ToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoViewController.m; sourceTree = "<group>"; };
+		13338BB218015289004BC64D /* ToDoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToDoViewController.xib; sourceTree = "<group>"; };
+		13338BBB180160F7004BC64D /* EditableTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditableTableCell.xib; sourceTree = "<group>"; };
+		13338BBD1801616A004BC64D /* EditableTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTableCell.h; sourceTree = "<group>"; };
+		13338BBE1801616A004BC64D /* EditableTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTableCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,8 +119,14 @@
 			children = (
 				13338B9018015274004BC64D /* AppDelegate.h */,
 				13338B9118015274004BC64D /* AppDelegate.m */,
+				13338BB018015289004BC64D /* ToDoViewController.h */,
+				13338BB118015289004BC64D /* ToDoViewController.m */,
+				13338BB218015289004BC64D /* ToDoViewController.xib */,
 				13338B9318015274004BC64D /* Images.xcassets */,
 				13338B8818015274004BC64D /* Supporting Files */,
+				13338BBB180160F7004BC64D /* EditableTableCell.xib */,
+				13338BBD1801616A004BC64D /* EditableTableCell.h */,
+				13338BBE1801616A004BC64D /* EditableTableCell.m */,
 			);
 			path = ToDoApp;
 			sourceTree = "<group>";
@@ -219,6 +235,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13338BBC180160F7004BC64D /* EditableTableCell.xib in Resources */,
+				13338BB418015289004BC64D /* ToDoViewController.xib in Resources */,
 				13338B8C18015274004BC64D /* InfoPlist.strings in Resources */,
 				13338B9418015274004BC64D /* Images.xcassets in Resources */,
 			);
@@ -239,8 +257,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13338BBF1801616A004BC64D /* EditableTableCell.m in Sources */,
 				13338B9218015274004BC64D /* AppDelegate.m in Sources */,
 				13338B8E18015274004BC64D /* main.m in Sources */,
+				13338BB318015289004BC64D /* ToDoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
