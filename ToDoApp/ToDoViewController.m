@@ -12,8 +12,9 @@
 @interface ToDoViewController ()
 
 @property (strong, nonatomic) NSMutableArray *items; // of EditableTableCell
+@property (strong, nonatomic) UIGestureRecognizer *gestureRecognizer;
 
-- (EditableTableCell *)createCell:(NSString *)text;
+- (EditableTableCell *)createCellWithText:(NSString *)text;
 - (void)synchronize;
 
 @end
@@ -28,10 +29,18 @@
         _items = [[NSMutableArray alloc] init];
         NSArray *list = [[NSUserDefaults standardUserDefaults] arrayForKey:TO_DO_KEY];
         for (NSString *text in list) {
-            [_items addObject:[self createCell:text]];
+            [_items addObject:[self createCellWithText:text]];
         }
     }
     return _items;
+}
+
+- (UIGestureRecognizer *)gestureRecognizer
+{
+    if (!_gestureRecognizer) {
+        _gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap)];
+    }
+    return _gestureRecognizer;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -39,34 +48,34 @@
     self = [super initWithStyle:style];
     if (self) {
         self.title = @"To Do List";
-        [self finishEdit];
-     
-// TODO: figure out why tap doesn't work
-//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap)];
-//        [self.view addGestureRecognizer:tap];
+        [self didFinishEditing];
     }
     return self;
 }
 
-- (void)addItem
+- (void)addEditableCell
 {
-    [self.items insertObject:[self createCell:@""] atIndex:0];
+    EditableTableCell *cell = [self createCellWithText:@""];
+    [self.items insertObject:cell atIndex:0];
     [self synchronize];
     [self.tableView reloadData];
+    [cell.textField becomeFirstResponder];
 }
 
-- (void)startEdit
+- (void)didStartEditing
 {
+    [self.view removeGestureRecognizer:self.gestureRecognizer];
     [self.tableView setEditing:YES animated:YES];
     self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(finishEdit)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(didFinishEditing)];
 }
 
-- (void)finishEdit
+- (void)didFinishEditing
 {
+    [self.view addGestureRecognizer:self.gestureRecognizer];
     [self.tableView setEditing:NO animated:YES];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(startEdit)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addEditableCell)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(didStartEditing)];
 }
 
 - (IBAction)onTap
@@ -147,7 +156,7 @@
 
 #pragma mark - Private methods
 
-- (EditableTableCell *)createCell:(NSString *)text
+- (EditableTableCell *)createCellWithText:(NSString *)text
 {
     static NSString *identifier = @"EditableTableCell";
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifier owner:self options:nil];
