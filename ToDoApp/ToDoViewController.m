@@ -15,7 +15,7 @@
 @property (strong, nonatomic) UIGestureRecognizer *gestureRecognizer;
 
 - (EditableTableCell *)createCellWithText:(NSString *)text;
-- (void)synchronize;
+- (void)saveToUserDefaults;
 
 @end
 
@@ -48,7 +48,7 @@
     self = [super initWithStyle:style];
     if (self) {
         self.title = @"To Do List";
-        [self didFinishEditing];
+        [self didFinishTableViewEditing];
     }
     return self;
 }
@@ -57,25 +57,26 @@
 {
     EditableTableCell *cell = [self createCellWithText:@""];
     [self.items insertObject:cell atIndex:0];
-    [self synchronize];
+    [self saveToUserDefaults];
     [self.tableView reloadData];
+    cell.textField.delegate = self;
     [cell.textField becomeFirstResponder];
 }
 
-- (void)didStartEditing
+- (void)didStartTableViewEditing
 {
     [self.view removeGestureRecognizer:self.gestureRecognizer];
     [self.tableView setEditing:YES animated:YES];
     self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(didFinishEditing)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(didFinishTableViewEditing)];
 }
 
-- (void)didFinishEditing
+- (void)didFinishTableViewEditing
 {
     [self.view addGestureRecognizer:self.gestureRecognizer];
     [self.tableView setEditing:NO animated:YES];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addEditableCell)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(didStartEditing)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(didStartTableViewEditing)];
 }
 
 - (IBAction)onTap
@@ -116,7 +117,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [self.items removeObjectAtIndex:indexPath.item];
-        [self synchronize];
+        [self saveToUserDefaults];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
@@ -126,7 +127,7 @@
     id cell = self.items[sourceIndexPath.item];
     [self.items insertObject:cell atIndex:destinationIndexPath.item];
     [self.items removeObjectAtIndex:sourceIndexPath.item];
-    [self synchronize];
+    [self saveToUserDefaults];
 }
 
 #pragma mark - Table view delegate
@@ -151,7 +152,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self synchronize];
+    [self saveToUserDefaults];
 }
 
 #pragma mark - Private methods
@@ -166,7 +167,7 @@
     return cell;
 }
 
-- (void)synchronize
+- (void)saveToUserDefaults
 {
     NSMutableArray *list = [[NSMutableArray alloc] init];
     for (EditableTableCell *cell in self.items) {
