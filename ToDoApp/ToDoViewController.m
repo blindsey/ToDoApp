@@ -10,7 +10,6 @@
 #import "EditableTableCell.h"
 
 #define DEFAULTS_KEY @"ToDoList_ALL"
-#define REUSE_IDENTIFIER @"EditableTableCell"
 
 @interface ToDoViewController ()
 
