@@ -15,10 +15,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="tap here to edit text" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zaa-XU-ikp">
-                        <rect key="frame" x="15" y="7" width="285" height="30"/>
+                        <rect key="frame" x="20" y="7" width="294" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
                 </subviews>

@@ -9,30 +9,54 @@
 #import "ToDoViewController.h"
 #import "EditableTableCell.h"
 
+#define DEFAULTS_KEY @"ToDoList_ALL"
+#define REUSE_IDENTIFIER @"EditableTableCell"
+
 @interface ToDoViewController ()
 
-@property (strong, nonatomic) NSMutableArray *items; // of EditableTableCell
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (strong, nonatomic) NSMutableArray *cells; // of EditableTableCell
 @property (strong, nonatomic) UIGestureRecognizer *gestureRecognizer;
 
-- (EditableTableCell *)createCellWithText:(NSString *)text;
+- (void)onAdd;
+- (void)onEdit;
+- (void)onDoneEdit;
+- (void)onTap;
+
+- (EditableTableCell *)editableCellWithText:(NSString *)text;
 - (void)saveToUserDefaults;
 
 @end
 
-#define TO_DO_KEY @"ToDoList_ALL"
-
 @implementation ToDoViewController
 
-- (NSMutableArray *)items
+- (void)viewDidLoad
 {
-    if (!_items) {
-        _items = [[NSMutableArray alloc] init];
-        NSArray *list = [[NSUserDefaults standardUserDefaults] arrayForKey:TO_DO_KEY];
+    [super viewDidLoad];
+    self.title = @"To Do List";
+    self.tableView.dataSource = self;
+    [self onDoneEdit];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Properties
+
+- (NSMutableArray *)cells
+{
+    if (!_cells) {
+        _cells = [[NSMutableArray alloc] init];
+        NSArray *list = [[NSUserDefaults standardUserDefaults] arrayForKey:DEFAULTS_KEY];
         for (NSString *text in list) {
-            [_items addObject:[self createCellWithText:text]];
+            [_cells addObject:[self editableCellWithText:text]];
         }
     }
-    return _items;
+    return _cells;
 }
 
 - (UIGestureRecognizer *)gestureRecognizer
@@ -43,110 +67,34 @@
     return _gestureRecognizer;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        self.title = @"To Do List";
-        [self didFinishTableViewEditing];
-    }
-    return self;
-}
-
-- (void)addEditableCell
-{
-    EditableTableCell *cell = [self createCellWithText:@""];
-    [self.items insertObject:cell atIndex:0];
-    [self saveToUserDefaults];
-    [self.tableView reloadData];
-    cell.textField.delegate = self;
-    [cell.textField becomeFirstResponder];
-}
-
-- (void)didStartTableViewEditing
-{
-    [self.view removeGestureRecognizer:self.gestureRecognizer];
-    [self.tableView setEditing:YES animated:YES];
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(didFinishTableViewEditing)];
-}
-
-- (void)didFinishTableViewEditing
-{
-    [self.view addGestureRecognizer:self.gestureRecognizer];
-    [self.tableView setEditing:NO animated:YES];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addEditableCell)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(didStartTableViewEditing)];
-}
-
-- (IBAction)onTap
-{
-    [self.view endEditing:YES];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return self.items[indexPath.item];
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.items count];
+    return [self.cells count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return self.cells[indexPath.item];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.items removeObjectAtIndex:indexPath.item];
-        [self saveToUserDefaults];
+        [self.cells removeObjectAtIndex:indexPath.item];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self saveToUserDefaults];
     }
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    id cell = self.items[sourceIndexPath.item];
-    [self.items insertObject:cell atIndex:destinationIndexPath.item];
-    [self.items removeObjectAtIndex:sourceIndexPath.item];
+    EditableTableCell *cell = self.cells[sourceIndexPath.row];
+    [self.cells removeObjectAtIndex:sourceIndexPath.row];
+    [self.cells insertObject:cell atIndex:destinationIndexPath.row];
     [self saveToUserDefaults];
 }
-
-#pragma mark - Table view delegate
-/*
-
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
-}
- 
- */
 
 #pragma mark - Text field delegate
 
@@ -157,10 +105,44 @@
 
 #pragma mark - Private methods
 
-- (EditableTableCell *)createCellWithText:(NSString *)text
+- (void)onAdd
 {
-    static NSString *identifier = @"EditableTableCell";
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifier owner:self options:nil];
+    EditableTableCell *cell = [self editableCellWithText:@""];
+    [self.cells insertObject:cell atIndex:0];
+    [self.tableView reloadData];
+    [cell.textField becomeFirstResponder];
+}
+
+- (void)onEdit
+{
+    [self.view removeGestureRecognizer:self.gestureRecognizer];
+    [self.tableView setEditing:YES animated:YES];
+    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneEdit)];
+    for (EditableTableCell *cell in self.cells) {
+        cell.textField.enabled = NO;
+    }
+}
+
+- (void)onDoneEdit
+{
+    [self.view addGestureRecognizer:self.gestureRecognizer];
+    [self.tableView setEditing:NO animated:YES];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAdd)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(onEdit)];
+    for (EditableTableCell *cell in self.cells) {
+        cell.textField.enabled = YES;
+    }
+}
+
+- (void)onTap
+{
+    [self.view endEditing:YES];
+}
+
+- (EditableTableCell *)editableCellWithText:(NSString *)text
+{
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"EditableTableCell" owner:self options:nil];
     EditableTableCell *cell = [nib objectAtIndex:0];
     cell.textField.text = text;
     cell.textField.delegate = self;
@@ -170,11 +152,11 @@
 - (void)saveToUserDefaults
 {
     NSMutableArray *list = [[NSMutableArray alloc] init];
-    for (EditableTableCell *cell in self.items) {
+    for (EditableTableCell *cell in self.cells) {
         [list addObject:cell.textField.text];
     }
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:list forKey:TO_DO_KEY];
+    [userDefaults setObject:list forKey:DEFAULTS_KEY];
     [userDefaults synchronize];
 }
 
