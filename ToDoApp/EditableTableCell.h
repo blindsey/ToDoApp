@@ -10,6 +10,7 @@
 
 @interface EditableTableCell : UITableViewCell
 
+@property (strong, nonatomic) NSMutableString *dataSource;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 
 @end

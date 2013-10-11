@@ -26,4 +26,14 @@
     // Configure the view for the selected state
 }
 
+- (void)setDataSource:(NSMutableString *)dataSource
+{
+    _dataSource = dataSource;
+    self.textField.text = _dataSource;
+}
+
+- (IBAction)onEndEditing {
+    [self.dataSource setString:self.textField.text];
+}
+
 @end

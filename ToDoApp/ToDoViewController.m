@@ -8,23 +8,21 @@
 
 #import "ToDoViewController.h"
 #import "EditableTableCell.h"
+#import "ToDoList.h"
 
-#define DEFAULTS_KEY @"ToDoList_ALL"
+#define REUSE_IDENTIFIER @"EditableTableCell"
 
 @interface ToDoViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (strong, nonatomic) NSMutableArray *cells; // of EditableTableCell
+@property (strong, nonatomic) ToDoList *list;
 @property (strong, nonatomic) UIGestureRecognizer *gestureRecognizer;
 
 - (void)onAdd;
 - (void)onEdit;
 - (void)onDoneEdit;
 - (void)onTap;
-
-- (EditableTableCell *)editableCellWithText:(NSString *)text;
-- (void)saveToUserDefaults;
 
 @end
 
@@ -35,6 +33,7 @@
     [super viewDidLoad];
     self.title = @"To Do List";
     self.tableView.dataSource = self;
+    self.tableView.contentInset = UIEdgeInsetsMake(-10, 0, 0, 0); // remove top margin
     [self onDoneEdit];
 }
 
@@ -46,16 +45,12 @@
 
 #pragma mark - Properties
 
-- (NSMutableArray *)cells
+- (ToDoList *)list
 {
-    if (!_cells) {
-        _cells = [[NSMutableArray alloc] init];
-        NSArray *list = [[NSUserDefaults standardUserDefaults] arrayForKey:DEFAULTS_KEY];
-        for (NSString *text in list) {
-            [_cells addObject:[self editableCellWithText:text]];
-        }
+    if (!_list) {
+        _list = [[ToDoList alloc] init];
     }
-    return _cells;
+    return _list;
 }
 
 - (UIGestureRecognizer *)gestureRecognizer
@@ -70,45 +65,46 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.cells count];
+    return [self.list count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return self.cells[indexPath.item];
+    EditableTableCell *cell = [tableView dequeueReusableCellWithIdentifier:REUSE_IDENTIFIER forIndexPath:indexPath];
+    cell.dataSource = [self.list getItemAtIndex:indexPath.row];
+    cell.textField.delegate = self;
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.cells removeObjectAtIndex:indexPath.item];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        [self saveToUserDefaults];
+        [self.list removeItemAtIndex:indexPath.row];
     }
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    EditableTableCell *cell = self.cells[sourceIndexPath.row];
-    [self.cells removeObjectAtIndex:sourceIndexPath.row];
-    [self.cells insertObject:cell atIndex:destinationIndexPath.row];
-    [self saveToUserDefaults];
+    [self.list moveItemFromIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
 }
 
 #pragma mark - Text field delegate
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self saveToUserDefaults];
+    [self.list save];
 }
 
 #pragma mark - Private methods
 
 - (void)onAdd
 {
-    EditableTableCell *cell = [self editableCellWithText:@""];
-    [self.cells insertObject:cell atIndex:0];
+    [self.list newItem];
     [self.tableView reloadData];
+    
+    NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:0];
+    EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
     [cell.textField becomeFirstResponder];
 }
 
@@ -118,7 +114,10 @@
     [self.tableView setEditing:YES animated:YES];
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneEdit)];
-    for (EditableTableCell *cell in self.cells) {
+
+    for (int i = self.list.count - 1; i >= 0; --i) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+        EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
         cell.textField.enabled = NO;
     }
 }
@@ -129,7 +128,10 @@
     [self.tableView setEditing:NO animated:YES];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAdd)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(onEdit)];
-    for (EditableTableCell *cell in self.cells) {
+
+    for (int i = self.list.count - 1; i >= 0; --i) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+        EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
         cell.textField.enabled = YES;
     }
 }
@@ -137,26 +139,6 @@
 - (void)onTap
 {
     [self.view endEditing:YES];
-}
-
-- (EditableTableCell *)editableCellWithText:(NSString *)text
-{
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"EditableTableCell" owner:self options:nil];
-    EditableTableCell *cell = [nib objectAtIndex:0];
-    cell.textField.text = text;
-    cell.textField.delegate = self;
-    return cell;
-}
-
-- (void)saveToUserDefaults
-{
-    NSMutableArray *list = [[NSMutableArray alloc] init];
-    for (EditableTableCell *cell in self.cells) {
-        [list addObject:cell.textField.text];
-    }
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:list forKey:DEFAULTS_KEY];
-    [userDefaults synchronize];
 }
 
 @end

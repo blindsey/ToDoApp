@@ -21,8 +21,8 @@
 		13338BA518015274004BC64D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13338BA318015274004BC64D /* InfoPlist.strings */; };
 		13338BA718015274004BC64D /* ToDoAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13338BA618015274004BC64D /* ToDoAppTests.m */; };
 		13338BB318015289004BC64D /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13338BB118015289004BC64D /* ToDoViewController.m */; };
-		13338BBC180160F7004BC64D /* EditableTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13338BBB180160F7004BC64D /* EditableTableCell.xib */; };
 		13338BBF1801616A004BC64D /* EditableTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13338BBE1801616A004BC64D /* EditableTableCell.m */; };
+		137BF3B21807B8CC00EC70D1 /* ToDoList.m in Sources */ = {isa = PBXBuildFile; fileRef = 137BF3B11807B8CC00EC70D1 /* ToDoList.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,9 +55,10 @@
 		13338BA618015274004BC64D /* ToDoAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToDoAppTests.m; sourceTree = "<group>"; };
 		13338BB018015289004BC64D /* ToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoViewController.h; sourceTree = "<group>"; };
 		13338BB118015289004BC64D /* ToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoViewController.m; sourceTree = "<group>"; };
-		13338BBB180160F7004BC64D /* EditableTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditableTableCell.xib; sourceTree = "<group>"; };
 		13338BBD1801616A004BC64D /* EditableTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTableCell.h; sourceTree = "<group>"; };
 		13338BBE1801616A004BC64D /* EditableTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTableCell.m; sourceTree = "<group>"; };
+		137BF3B01807B8CC00EC70D1 /* ToDoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoList.h; sourceTree = "<group>"; };
+		137BF3B11807B8CC00EC70D1 /* ToDoList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoList.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,11 +121,12 @@
 				13141795180684D200D3B379 /* Main.storyboard */,
 				13338BB018015289004BC64D /* ToDoViewController.h */,
 				13338BB118015289004BC64D /* ToDoViewController.m */,
-				13338BBB180160F7004BC64D /* EditableTableCell.xib */,
 				13338BBD1801616A004BC64D /* EditableTableCell.h */,
 				13338BBE1801616A004BC64D /* EditableTableCell.m */,
 				13338B9318015274004BC64D /* Images.xcassets */,
 				13338B8818015274004BC64D /* Supporting Files */,
+				137BF3B01807B8CC00EC70D1 /* ToDoList.h */,
+				137BF3B11807B8CC00EC70D1 /* ToDoList.m */,
 			);
 			path = ToDoApp;
 			sourceTree = "<group>";
@@ -235,7 +237,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13338BBC180160F7004BC64D /* EditableTableCell.xib in Resources */,
 				13141796180684D200D3B379 /* Main.storyboard in Resources */,
 				13338B8C18015274004BC64D /* InfoPlist.strings in Resources */,
 				13338B9418015274004BC64D /* Images.xcassets in Resources */,
@@ -258,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13338BBF1801616A004BC64D /* EditableTableCell.m in Sources */,
+				137BF3B21807B8CC00EC70D1 /* ToDoList.m in Sources */,
 				13338B9218015274004BC64D /* AppDelegate.m in Sources */,
 				13338B8E18015274004BC64D /* main.m in Sources */,
 				13338BB318015289004BC64D /* ToDoViewController.m in Sources */,
