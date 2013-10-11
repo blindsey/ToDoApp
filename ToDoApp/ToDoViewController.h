@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EditableTableCell.h"
 
-@interface ToDoViewController : UIViewController <UITableViewDataSource, UITextFieldDelegate>
+@interface ToDoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, EditableTableCellDelegate>
 
 @end

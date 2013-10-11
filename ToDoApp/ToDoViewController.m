@@ -33,6 +33,7 @@
     [super viewDidLoad];
     self.title = @"To Do List";
     self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     self.tableView.contentInset = UIEdgeInsetsMake(-10, 0, 0, 0); // remove top margin
     [self onDoneEdit];
 }
@@ -71,16 +72,16 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EditableTableCell *cell = [tableView dequeueReusableCellWithIdentifier:REUSE_IDENTIFIER forIndexPath:indexPath];
-    cell.dataSource = [self.list getItemAtIndex:indexPath.row];
-    cell.textField.delegate = self;
+    cell.item = [self.list getItemAtIndex:indexPath.row];
+    cell.delegate = self;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self.list removeItemAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
@@ -89,11 +90,25 @@
     [self.list moveItemFromIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
 }
 
-#pragma mark - Text field delegate
+#pragma mark - Table view delegate
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ToDoItem *item = [self.list getItemAtIndex:indexPath.row];
+    NSArray *components = [item.text componentsSeparatedByString:@"\n"];
+    return 34 + ([components count] - 1) * 16;
+}
+
+#pragma mark - Editable table cell delegate
+
+- (void)textDidChange:(EditableTableCell *)cell
 {
     [self.list save];
+    NSRange r = [cell.item.text rangeOfString:@"\n"];
+    if (r.location != NSNotFound) {
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+    }
 }
 
 #pragma mark - Private methods
@@ -102,10 +117,11 @@
 {
     [self.list newItem];
     [self.tableView reloadData];
+    [self onDoneEdit];
     
     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:0];
     EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
-    [cell.textField becomeFirstResponder];
+    [cell.textView becomeFirstResponder];
 }
 
 - (void)onEdit
@@ -118,7 +134,7 @@
     for (int i = self.list.count - 1; i >= 0; --i) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
         EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
-        cell.textField.enabled = NO;
+        cell.textView.editable = NO;
     }
 }
 
@@ -127,12 +143,12 @@
     [self.view addGestureRecognizer:self.gestureRecognizer];
     [self.tableView setEditing:NO animated:YES];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAdd)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(onEdit)];
+    self.navigationItem.leftBarButtonItem = [self.list count] == 0 ? nil : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(onEdit)];
 
     for (int i = self.list.count - 1; i >= 0; --i) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
         EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
-        cell.textField.enabled = YES;
+        cell.textView.editable = YES;
     }
 }
 

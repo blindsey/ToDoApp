@@ -7,10 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ToDoItem.h"
 
-@interface EditableTableCell : UITableViewCell
+@class EditableTableCell;
 
-@property (strong, nonatomic) NSMutableString *dataSource;
-@property (weak, nonatomic) IBOutlet UITextField *textField;
+@protocol EditableTableCellDelegate <NSObject>
+
+@optional
+- (void)textDidChange:(EditableTableCell *)cell;
 
 @end
+
+@interface EditableTableCell : UITableViewCell <UITextViewDelegate>
+
+@property (strong, nonatomic) ToDoItem *item;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+
+@property (weak, nonatomic) id <EditableTableCellDelegate> delegate;
+
+@end
+

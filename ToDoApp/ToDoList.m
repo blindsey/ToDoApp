@@ -12,7 +12,7 @@
 
 @interface ToDoList ()
 
-@property (strong, nonatomic) NSMutableArray* items; // of NSMutableString
+@property (strong, nonatomic) NSMutableArray* items; // of ToDoItem
 
 @end
 
@@ -24,7 +24,7 @@
     if (self) {
         NSArray *list = [[NSUserDefaults standardUserDefaults] arrayForKey:DEFAULTS_KEY];
         for (NSString *text in list) {
-            [self.items addObject:[NSMutableString stringWithString:text]];
+            [self.items addObject:[[ToDoItem alloc] initWithText:text]];
         }
     }
     return self;
@@ -43,15 +43,15 @@
     return [self.items count];
 }
 
-- (NSMutableString *)newItem
+- (ToDoItem *)newItem
 {
-    NSMutableString *item = [NSMutableString stringWithString:@""];
+    ToDoItem *item = [[ToDoItem alloc] initWithText:@""];
     [self.items insertObject:item atIndex:0];
     [self save];
     return item;
 }
 
-- (NSMutableString *)getItemAtIndex:(NSUInteger)index
+- (ToDoItem *)getItemAtIndex:(NSUInteger)index
 {
     return self.items[index];
 }
@@ -64,7 +64,7 @@
 
 - (void)moveItemFromIndex:(NSUInteger)source toIndex:(NSUInteger)destination
 {
-    NSMutableString *item = self.items[source];
+    id item = self.items[source];
     [self.items removeObjectAtIndex:source];
     [self.items insertObject:item atIndex:destination];
     [self save];
@@ -72,8 +72,13 @@
 
 - (void)save
 {
+    // TODO: persist done state as first character
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.items forKey:DEFAULTS_KEY];
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    for (ToDoItem *item in self.items) {
+        [array addObject:item.text];
+    }
+    [userDefaults setObject:array forKey:DEFAULTS_KEY];
     [userDefaults synchronize];
 }
 

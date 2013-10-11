@@ -8,6 +8,10 @@
 
 #import "EditableTableCell.h"
 
+@interface EditableTableCell ()
+
+@end
+
 @implementation EditableTableCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -26,14 +30,17 @@
     // Configure the view for the selected state
 }
 
-- (void)setDataSource:(NSMutableString *)dataSource
+- (void)setItem:(ToDoItem *)item
 {
-    _dataSource = dataSource;
-    self.textField.text = _dataSource;
+    _item = item;
+    self.textView.text = item.text;
+    self.textView.delegate = self;
 }
 
-- (IBAction)onEndEditing {
-    [self.dataSource setString:self.textField.text];
+- (void)textViewDidChange:(UITextView *)textView
+{
+    self.item.text = textView.text;
+    [self.delegate textDidChange:self];
 }
 
 @end

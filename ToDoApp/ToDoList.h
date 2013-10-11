@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ToDoItem.h"
 
 @interface ToDoList : NSObject
 
 - (NSUInteger)count;
-- (NSMutableString *)newItem;
-- (NSMutableString *)getItemAtIndex:(NSUInteger)index;
+- (ToDoItem *)newItem;
+- (ToDoItem *)getItemAtIndex:(NSUInteger)index;
 - (void)removeItemAtIndex:(NSUInteger)index;
 - (void)moveItemFromIndex:(NSUInteger)source toIndex:(NSUInteger)destination;
 - (void)save;
