@@ -24,6 +24,8 @@
 		13338BBF1801616A004BC64D /* EditableTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13338BBE1801616A004BC64D /* EditableTableCell.m */; };
 		137BF3B21807B8CC00EC70D1 /* ToDoList.m in Sources */ = {isa = PBXBuildFile; fileRef = 137BF3B11807B8CC00EC70D1 /* ToDoList.m */; };
 		137BF3B518089CAB00EC70D1 /* ToDoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 137BF3B418089CAB00EC70D1 /* ToDoItem.m */; };
+		13C4601C1808E7080097B555 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C4601A1808E7080097B555 /* checked.png */; };
+		13C4601D1808E7080097B555 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 13C4601B1808E7080097B555 /* unchecked.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		137BF3B11807B8CC00EC70D1 /* ToDoList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoList.m; sourceTree = "<group>"; };
 		137BF3B318089CAB00EC70D1 /* ToDoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoItem.h; sourceTree = "<group>"; };
 		137BF3B418089CAB00EC70D1 /* ToDoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoItem.m; sourceTree = "<group>"; };
+		13C4601A1808E7080097B555 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
+		13C4601B1808E7080097B555 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +143,8 @@
 		13338B8818015274004BC64D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				13C4601A1808E7080097B555 /* checked.png */,
+				13C4601B1808E7080097B555 /* unchecked.png */,
 				13338B9018015274004BC64D /* AppDelegate.h */,
 				13338B9118015274004BC64D /* AppDelegate.m */,
 				13338B8918015274004BC64D /* ToDoApp-Info.plist */,
@@ -243,8 +249,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				13141796180684D200D3B379 /* Main.storyboard in Resources */,
+				13C4601C1808E7080097B555 /* checked.png in Resources */,
 				13338B8C18015274004BC64D /* InfoPlist.strings in Resources */,
 				13338B9418015274004BC64D /* Images.xcassets in Resources */,
+				13C4601D1808E7080097B555 /* unchecked.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

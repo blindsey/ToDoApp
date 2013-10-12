@@ -101,7 +101,7 @@
 
 #pragma mark - Editable table cell delegate
 
-- (void)textDidChange:(EditableTableCell *)cell
+- (void)itemDidChange:(EditableTableCell *)cell
 {
     [self.list save];
     NSRange r = [cell.item.text rangeOfString:@"\n"];
@@ -134,7 +134,7 @@
     for (int i = self.list.count - 1; i >= 0; --i) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
         EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
-        cell.textView.editable = NO;
+        cell.textView.editable = NO; // disable keyboard
     }
 }
 
@@ -148,7 +148,7 @@
     for (int i = self.list.count - 1; i >= 0; --i) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
         EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
-        cell.textView.editable = YES;
+        cell.textView.editable = !cell.item.done; // only editable if not finished
     }
 }
 

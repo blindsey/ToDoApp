@@ -14,7 +14,7 @@
 @protocol EditableTableCellDelegate <NSObject>
 
 @optional
-- (void)textDidChange:(EditableTableCell *)cell;
+- (void)itemDidChange:(EditableTableCell *)cell;
 
 @end
 
@@ -22,6 +22,7 @@
 
 @property (strong, nonatomic) ToDoItem *item;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 @property (weak, nonatomic) id <EditableTableCellDelegate> delegate;
 

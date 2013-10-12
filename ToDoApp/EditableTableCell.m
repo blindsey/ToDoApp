@@ -10,6 +10,8 @@
 
 @interface EditableTableCell ()
 
+- (void)setStateWithDone:(BOOL)done;
+
 @end
 
 @implementation EditableTableCell
@@ -23,6 +25,11 @@
     return self;
 }
 
+- (void)awakeFromNib
+{
+    [self.doneButton setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -33,6 +40,7 @@
 - (void)setItem:(ToDoItem *)item
 {
     _item = item;
+    [self setStateWithDone:item.done];
     self.textView.text = item.text;
     self.textView.delegate = self;
 }
@@ -40,7 +48,29 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
     self.item.text = textView.text;
-    [self.delegate textDidChange:self];
+    [self.delegate itemDidChange:self];
+}
+
+- (IBAction)onCheck:(UIButton *)sender
+{
+    [self setStateWithDone:!sender.selected];
+    [self.delegate itemDidChange:self];
+}
+
+# pragma mark - Private methods
+
+- (void)setStateWithDone:(BOOL)done
+{
+    NSMutableAttributedString *mas = [[NSMutableAttributedString alloc] initWithAttributedString:self.textView.attributedText];
+    NSRange range = NSMakeRange(0, [mas length]);
+    NSUnderlineStyle style = done ? NSUnderlineStyleSingle : NSUnderlineStyleNone;
+    [mas addAttribute:NSStrikethroughStyleAttributeName
+                value:[NSNumber numberWithInt:style]
+                range:range];
+    self.textView.attributedText = mas;
+    self.textView.editable = NO;
+    self.backgroundColor = done ? [UIColor lightGrayColor] : nil;
+    self.item.done = self.doneButton.selected = done;
 }
 
 @end

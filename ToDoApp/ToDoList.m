@@ -8,7 +8,9 @@
 
 #import "ToDoList.h"
 
-#define DEFAULTS_KEY @"ToDoList_ALL"
+#define DEFAULTS_KEY @"ToDoList2_ALL"
+#define DONE_KEY @"done"
+#define TEXT_KEY @"text"
 
 @interface ToDoList ()
 
@@ -23,8 +25,11 @@
     self = [super init];
     if (self) {
         NSArray *list = [[NSUserDefaults standardUserDefaults] arrayForKey:DEFAULTS_KEY];
-        for (NSString *text in list) {
-            [self.items addObject:[[ToDoItem alloc] initWithText:text]];
+        for (NSDictionary *dict in list) {
+            ToDoItem *item = [[ToDoItem alloc] init];
+            item.done = [dict[DONE_KEY] boolValue];
+            item.text = dict[TEXT_KEY];
+            [self.items addObject:item];
         }
     }
     return self;
@@ -76,7 +81,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSMutableArray *array = [[NSMutableArray alloc] init];
     for (ToDoItem *item in self.items) {
-        [array addObject:item.text];
+        [array addObject:@{ DONE_KEY : item.done ? @"1" : @"0", TEXT_KEY : item.text }];
     }
     [userDefaults setObject:array forKey:DEFAULTS_KEY];
     [userDefaults synchronize];

@@ -11,7 +11,7 @@
 @interface ToDoItem : NSObject
 
 @property (strong, nonatomic) NSString *text;
-@property (nonatomic) BOOL *done;
+@property (nonatomic) BOOL done;
 
 - (id)initWithText:(NSString *)text;
 
