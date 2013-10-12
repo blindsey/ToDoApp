@@ -105,7 +105,7 @@
 
     CGRect frame = [string boundingRectWithSize:CGSizeMake(TEXTVIEW_WIDTH, 1000)
                                         options:NSStringDrawingUsesLineFragmentOrigin| NSStringDrawingUsesFontLeading
-                                            context:nil];
+                                        context:nil];
     return frame.size.height + 20;
 }
 
