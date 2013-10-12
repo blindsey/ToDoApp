@@ -30,12 +30,6 @@
     [self.doneButton setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
 }
 
-- (void)willTransitionToState:(UITableViewCellStateMask)state
-{
-    [super willTransitionToState:state];
-    self.doneButton.hidden = (state != UITableViewCellStateDefaultMask);
-}
-
 - (void)layoutSubviews
 {
     [super layoutSubviews];

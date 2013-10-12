@@ -11,6 +11,7 @@
 #import "ToDoList.h"
 
 #define REUSE_IDENTIFIER @"EditableTableCell"
+#define TEXTVIEW_WIDTH 260
 
 @interface ToDoViewController ()
 
@@ -35,6 +36,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.contentInset = UIEdgeInsetsMake(-10, 0, 0, 0); // remove top margin
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self onDoneEdit];
 }
 
@@ -95,8 +97,16 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ToDoItem *item = [self.list getItemAtIndex:indexPath.row];
-    NSArray *components = [item.text componentsSeparatedByString:@"\n"];
-    return 34 + ([components count] - 1) * 16;
+
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:item.text];
+    UIFont *font = [UIFont systemFontOfSize:14];
+    NSDictionary *attributes = @{ NSFontAttributeName : font };
+    [string addAttributes:attributes range:NSMakeRange(0, [string length])];
+
+    CGRect frame = [string boundingRectWithSize:CGSizeMake(TEXTVIEW_WIDTH, 1000)
+                                        options:NSStringDrawingUsesLineFragmentOrigin| NSStringDrawingUsesFontLeading
+                                            context:nil];
+    return frame.size.height + 20;
 }
 
 #pragma mark - Editable table cell delegate
