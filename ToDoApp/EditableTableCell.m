@@ -30,11 +30,19 @@
     [self.doneButton setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void)willTransitionToState:(UITableViewCellStateMask)state
 {
-    [super setSelected:selected animated:animated];
+    [super willTransitionToState:state];
+    self.doneButton.hidden = (state != UITableViewCellStateDefaultMask);
+}
 
-    // Configure the view for the selected state
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+
+    CGRect frame = self.contentView.frame;
+    frame.origin.x = 0; // disable indentation
+    self.contentView.frame = frame;
 }
 
 - (void)setItem:(ToDoItem *)item
@@ -68,7 +76,7 @@
                 value:[NSNumber numberWithInt:style]
                 range:range];
     self.textView.attributedText = mas;
-    self.textView.editable = NO;
+    self.textView.editable = !done;
     self.backgroundColor = done ? [UIColor lightGrayColor] : nil;
     self.item.done = self.doneButton.selected = done;
 }
