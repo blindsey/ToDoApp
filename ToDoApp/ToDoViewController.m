@@ -139,7 +139,7 @@
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneEdit)];
 
-    for (int i = [self.list count]; i >= 0; --i) {
+    for (int i = [self.list count] - 1; i >= 0; --i) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
         EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
         cell.textView.editable = NO; // disable keyboard
@@ -153,7 +153,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAdd)];
     self.navigationItem.leftBarButtonItem = [self.list count] == 0 ? nil : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(onEdit)];
 
-    for (int i = [self.list count]; i >= 0; --i) {
+    for (int i = [self.list count] - 1; i >= 0; --i) {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
         EditableTableCell *cell = (EditableTableCell *)[self.tableView cellForRowAtIndexPath:path];
         cell.textView.editable = !cell.item.done; // only editable if not finished
