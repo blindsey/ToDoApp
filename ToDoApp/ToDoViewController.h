@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "EditableTableCell.h"
 
-@interface ToDoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, EditableTableCellDelegate>
+@interface ToDoViewController : UITableViewController <EditableTableCellDelegate>
 
 @end

@@ -33,8 +33,6 @@
 {
     [super viewDidLoad];
     self.title = @"To Do List";
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
     [self onDoneEdit];
 }
 
