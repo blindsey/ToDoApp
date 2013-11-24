@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Di3-kT-lmG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Di3-kT-lmG">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
         <!--To Do View Controller-->
@@ -22,15 +22,22 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0M9-jP-cBB">
-                                            <rect key="frame" x="32" y="2" width="260" height="66"/>
+                                            <rect key="frame" x="32" y="0.0" width="250" height="69"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="250" id="aHq-tX-tLG"/>
+                                            </constraints>
                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                         </textView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Are-Bk-rpa">
-                                            <rect key="frame" x="14" y="24" width="15" height="22"/>
+                                            <rect key="frame" x="15" y="24" width="16" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="16" id="QtF-Gm-8pg"/>
+                                                <constraint firstAttribute="height" constant="22" id="lBY-Qi-FW9"/>
+                                            </constraints>
                                             <state key="normal" image="unchecked.png">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
@@ -38,25 +45,12 @@
                                                 <action selector="onCheck:" destination="MbY-pU-QAD" eventType="touchUpInside" id="WmJ-1M-ZgD"/>
                                             </connections>
                                         </button>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o7K-do-tuN">
-                                            <rect key="frame" x="0.0" y="68" width="320" height="1"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="1" id="sxf-4x-cgT"/>
-                                            </constraints>
-                                        </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="0M9-jP-cBB" secondAttribute="bottom" constant="1" id="6V3-zv-YHx"/>
-                                        <constraint firstAttribute="trailing" secondItem="0M9-jP-cBB" secondAttribute="trailing" constant="28" id="6it-z5-429"/>
-                                        <constraint firstItem="Are-Bk-rpa" firstAttribute="leading" secondItem="5Q1-F6-wH0" secondAttribute="leading" constant="14" id="8rU-fS-HXF"/>
-                                        <constraint firstAttribute="bottom" secondItem="o7K-do-tuN" secondAttribute="bottom" id="KMh-E3-r1v"/>
-                                        <constraint firstAttribute="trailing" secondItem="o7K-do-tuN" secondAttribute="trailing" id="NCP-pf-AAl"/>
-                                        <constraint firstItem="0M9-jP-cBB" firstAttribute="leading" secondItem="Are-Bk-rpa" secondAttribute="trailing" constant="3" id="S24-py-n7E"/>
-                                        <constraint firstAttribute="centerY" secondItem="Are-Bk-rpa" secondAttribute="centerY" id="SnW-6O-iGl"/>
-                                        <constraint firstItem="o7K-do-tuN" firstAttribute="leading" secondItem="5Q1-F6-wH0" secondAttribute="leading" id="URK-UF-8Ys"/>
-                                        <constraint firstItem="0M9-jP-cBB" firstAttribute="top" secondItem="5Q1-F6-wH0" secondAttribute="top" constant="2" id="d1x-aE-jvj"/>
+                                        <constraint firstAttribute="bottom" secondItem="0M9-jP-cBB" secondAttribute="bottom" id="6V3-zv-YHx"/>
+                                        <constraint firstItem="Are-Bk-rpa" firstAttribute="leading" secondItem="5Q1-F6-wH0" secondAttribute="leading" constant="15" id="8rU-fS-HXF"/>
+                                        <constraint firstItem="0M9-jP-cBB" firstAttribute="top" secondItem="5Q1-F6-wH0" secondAttribute="top" id="d1x-aE-jvj"/>
+                                        <constraint firstAttribute="centerY" secondItem="Are-Bk-rpa" secondAttribute="centerY" id="jZf-g5-4C7"/>
                                         <constraint firstItem="0M9-jP-cBB" firstAttribute="leading" secondItem="5Q1-F6-wH0" secondAttribute="leading" constant="32" id="kYE-fr-0L1"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -72,6 +66,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="zGY-ru-W3R"/>
+                    <connections>
+                        <outlet property="tableView" destination="rou-OT-9nb" id="ab8-ZN-Wh9"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mtd-Hx-BB4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

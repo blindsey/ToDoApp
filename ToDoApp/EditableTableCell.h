@@ -15,6 +15,7 @@
 
 @optional
 - (void)itemDidChange:(EditableTableCell *)cell;
+- (void)itemDidBeginEditing:(EditableTableCell *)cell;
 
 @end
 

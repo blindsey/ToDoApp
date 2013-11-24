@@ -11,11 +11,11 @@
 #import "ToDoList.h"
 
 #define REUSE_IDENTIFIER @"EditableTableCell"
-#define TEXTVIEW_WIDTH 260
+#define kTextViewPadding 11.0
 
 @interface ToDoViewController ()
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) ToDoList *list;
 @property (strong, nonatomic) UIGestureRecognizer *gestureRecognizer;
@@ -29,17 +29,41 @@
 
 @implementation ToDoViewController
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.title = @"To Do List";
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"To Do List";
+
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorInset = UIEdgeInsetsZero;
+
     [self onDoneEdit];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Properties
@@ -94,15 +118,14 @@
 {
     ToDoItem *item = [self.list getItemAtIndex:indexPath.row];
 
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:item.text];
-    UIFont *font = [UIFont systemFontOfSize:14];
-    NSDictionary *attributes = @{ NSFontAttributeName : font };
-    [string addAttributes:attributes range:NSMakeRange(0, [string length])];
+    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont systemFontOfSize:14.0] };
+    NSString *newString = [NSString stringWithFormat:@"%@|", item.text];
+    NSAttributedString *string = [[NSAttributedString alloc] initWithString:newString attributes:attributes];
 
-    CGRect frame = [string boundingRectWithSize:CGSizeMake(TEXTVIEW_WIDTH, 1000)
-                                        options:NSStringDrawingUsesLineFragmentOrigin| NSStringDrawingUsesFontLeading
+    CGRect frame = [string boundingRectWithSize:CGSizeMake(250 - kTextViewPadding, CGFLOAT_MAX)
+                                        options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading
                                         context:nil];
-    return frame.size.height + 20;
+    return ceilf(frame.size.height + 20);
 }
 
 #pragma mark - Editable table cell delegate
@@ -110,11 +133,14 @@
 - (void)itemDidChange:(EditableTableCell *)cell
 {
     [self.list save];
-    NSRange r = [cell.item.text rangeOfString:@"\n"];
-    if (r.location != NSNotFound) {
-        [self.tableView beginUpdates];
-        [self.tableView endUpdates];
-    }
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    [self.tableView scrollRectToVisible:cell.frame animated:YES];
+}
+
+- (void)itemDidBeginEditing:(EditableTableCell *)cell
+{
+    [self.tableView scrollRectToVisible:cell.frame animated:YES];
 }
 
 #pragma mark - Private methods
@@ -161,6 +187,27 @@
 - (void)onTap
 {
     [self.view endEditing:YES];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        self.tableView.frame = CGRectMake(0, 0, screen.size.width, screen.size.height - keyboardSize.height);
+    } else {
+        self.tableView.frame = CGRectMake(0, 0, screen.size.height, screen.size.width - keyboardSize.width);
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        self.tableView.frame = CGRectMake(0, 0, screen.size.width, screen.size.height);
+    } else {
+        self.tableView.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
+    }
 }
 
 @end

@@ -53,6 +53,11 @@
     [self.delegate itemDidChange:self];
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    [self.delegate itemDidBeginEditing:self];
+}
+
 - (IBAction)onCheck:(UIButton *)sender
 {
     [self setStateWithDone:!sender.selected];
@@ -71,7 +76,7 @@
                 range:range];
     self.textView.attributedText = mas;
     self.textView.editable = !done;
-    self.backgroundColor = done ? [UIColor lightGrayColor] : nil;
+    self.contentView.backgroundColor = done ? [UIColor lightGrayColor] : nil;
     self.item.done = self.doneButton.selected = done;
 }
 
